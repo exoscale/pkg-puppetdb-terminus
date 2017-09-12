@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+DISTRIBUTION = $(shell lsb_release -sc)
+VERSION = 2.3.8
+PACKAGEVERSION = $(VERSION)-0~$(DISTRIBUTION)1
+TARBALL = $(VERSION).tar.gz
+URL = https://github.com/puppetlabs/puppetdb/archive/$(TARBALL)
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	wget -N --progress=dot:mega $(URL)
+	tar --strip-components=1 -xf $(TARBALL)
+
+override_dh_gencontrol:
+	dh_gencontrol -- -v$(PACKAGEVERSION)
